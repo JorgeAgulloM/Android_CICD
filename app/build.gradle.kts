@@ -86,14 +86,16 @@ fun loadSecrets(): Properties {
     }
 }
 
+fun loadGitHubSecrets(): Properties {
+    val key = "TEST_PROPERTY"
+    val testProperty: String? = System.getenv(key)
+    if (testProperty != null)
+        System.setProperty(key, testProperty)
+    return Properties()
+}
+
 fun loadLocalSecrets(propertiesFile: File) = Properties().apply {
     propertiesFile.inputStream().use { fis ->
         load(fis)
     }
-}
-
-fun loadGitHubSecrets(): Properties {
-    val signingProperties = Properties()
-    signingProperties["TEST_PROPERTY"] = System.getenv("TEST_PROPERTY") ?: "myDefaultSecret"
-    return signingProperties
 }
