@@ -13,7 +13,7 @@ jobs:
           MY_SECRETS_KEY: ${{ secrets.MY_SECRETS_KEY }}
 
       - name: Copy file
-        run: cp $HOME/secrets/secrets.properties /home/runner/work/DailyElectricCost/DailyElectricCost/secrets.properties
+        run: cp $HOME/secrets/secrets.properties /home/runner/work/Android_CICD/Android_CICD/secrets.properties
 
       - name: set up JDK 17
         uses: actions/setup-java@v3
