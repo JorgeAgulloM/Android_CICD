@@ -7,11 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Load_properties
-        env:
-          super_secret: ${{ secrets.SECRETS_PROPERTIES }}
-        run: echo "$SECRETS_PROPERTIES" > secrets.properties
-
       - name: Decrypt secrets.properties
         run: ./decrypt_secrets.sh
         env:
