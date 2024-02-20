@@ -15,7 +15,7 @@ jobs:
       - name: Decrypt secrets.properties
         run: ./decrypt_secrets.sh
         env:
-          GOOGLE_SERVICES_KEY: ${{ secrets.SECRETS_PROPERTIES }}
+          GOOGLE_SERVICES_KEY: ${{ secrets.MY_SECRETS_KEY }}
 
       - name: Copy file
         run: cp $HOME/secrets/secrets.properties /home/runner/work/DailyElectricCost/DailyElectricCost/secrets.properties
