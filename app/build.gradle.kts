@@ -1,7 +1,11 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+
+val secrets = loadSecrets()
 
 android {
     namespace = "com.softyorch.android_ci_cd"
@@ -21,14 +25,20 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "TEST_PROPERTY", secrets["TEST_PROPERTY"].toString())
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "TEST_PROPERTY", secrets["TEST_PROPERTY"].toString())
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -66,4 +76,24 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
+
+fun loadSecrets(): Properties {
+    return if (System.getenv("GITHUB_WORKFLOW") != null) {
+        loadGitHubSecrets()
+    } else {
+        loadLocalSecrets(File("secrets.properties"))
+    }
+}
+
+fun loadLocalSecrets(propertiesFile: File) = Properties().apply {
+    propertiesFile.inputStream().use { fis ->
+        load(fis)
+    }
+}
+
+fun loadGitHubSecrets(): Properties {
+    val signingProperties = Properties()
+    signingProperties["TEST_PROPERTY"] = System.getenv("TEST_PROPERTY") ?: "myDefaultSecret"
+    return signingProperties
 }
