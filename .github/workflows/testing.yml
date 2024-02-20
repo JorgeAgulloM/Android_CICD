@@ -1,0 +1,35 @@
+name: Android Testing CI
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load_properties
+        env:
+          super_secret: ${{ secrets.SIGNING_PROPERTIES }}
+        run: echo "$SIGNING_PROPERTIES" > signing.properties
+
+      - name: Decrypt google.services.json
+        run: ./decrypt_secrets.sh
+        env:
+          GOOGLE_SERVICES_KEY: ${{ secrets.GOOGLE_SERVICES_KEY }}
+
+      - name: Copy file
+        run: cp $HOME/secrets/secrets.properties /home/runner/work/DailyElectricCost/DailyElectricCost/secrets.properties
+
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Unit Test
+        run: ./gradlew testDebugUnitTest
+
+      - name: Android Test Report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }}
