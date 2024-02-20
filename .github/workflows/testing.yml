@@ -9,13 +9,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Load_properties
         env:
-          super_secret: ${{ secrets.SIGNING_PROPERTIES }}
-        run: echo "$SIGNING_PROPERTIES" > signing.properties
+          super_secret: ${{ secrets.SECRETS_PROPERTIES }}
+        run: echo "$SECRETS_PROPERTIES" > signing.properties
 
-      - name: Decrypt google.services.json
+      - name: Decrypt secrets.properties
         run: ./decrypt_secrets.sh
         env:
-          GOOGLE_SERVICES_KEY: ${{ secrets.GOOGLE_SERVICES_KEY }}
+          GOOGLE_SERVICES_KEY: ${{ secrets.SECRETS_PROPERTIES }}
 
       - name: Copy file
         run: cp $HOME/secrets/secrets.properties /home/runner/work/DailyElectricCost/DailyElectricCost/secrets.properties
