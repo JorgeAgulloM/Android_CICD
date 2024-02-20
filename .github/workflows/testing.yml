@@ -10,7 +10,7 @@ jobs:
       - name: Load_properties
         env:
           super_secret: ${{ secrets.SECRETS_PROPERTIES }}
-        run: echo "$SECRETS_PROPERTIES" > signing.properties
+        run: echo "$SECRETS_PROPERTIES" > secrets.properties
 
       - name: Decrypt secrets.properties
         run: ./decrypt_secrets.sh
