@@ -79,20 +79,21 @@ dependencies {
 }
 
 fun loadSecrets(): Properties {
-    return if (System.getenv("GITHUB_WORKFLOW") != null) {
+    return loadLocalSecrets(File("secrets.properties"))
+    /*return if (System.getenv("GITHUB_WORKFLOW") != null) {
         loadGitHubSecrets()
     } else {
         loadLocalSecrets(File("secrets.properties"))
-    }
+    }*/
 }
 
-fun loadGitHubSecrets(): Properties {
+/*fun loadGitHubSecrets(): Properties {
     val key = "TEST_PROPERTY"
     val testProperty: String? = System.getenv(key)
     if (testProperty != null)
         System.setProperty(key, testProperty)
     return Properties()
-}
+}*/
 
 fun loadLocalSecrets(propertiesFile: File) = Properties().apply {
     propertiesFile.inputStream().use { fis ->
